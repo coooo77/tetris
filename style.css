@@ -8,10 +8,13 @@
 
 .grid div {
   height: 20px;
-  width: 20px;
-  background-color: brown;
+  width: 20px;  
 }
 
 #container {
   border: burlywood 5px dashed;
+}
+
+.tetromino {  
+  background-color: blue;
 }
