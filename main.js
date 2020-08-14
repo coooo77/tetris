@@ -93,24 +93,27 @@ const controller = {
     const width = model.width
     const squares = model.squares
     const currentPosition = model.currentPosition
-    view.undraw()
+    
     const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0)
-    const isCollision = current.some(index => squares[currentPosition + index].classList.contains('taken'))
-    if (!isAtLeftEdge) model.currentPosition--
-    if (isCollision) model.currentPosition++
-    view.draw()
+    const isCollision = current.some(index => squares[currentPosition + index - 1].classList.contains('taken'))
+    if (!isAtLeftEdge && !isCollision) {
+      view.undraw()
+      model.currentPosition--
+      view.draw()
+    }  
   },
   moveRight() {
     const width = model.width
     const squares = model.squares
     const current = model.currentTetromino
-    const currentPosition = model.currentPosition
-    view.undraw()
+    const currentPosition = model.currentPosition    
     const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1)
     const isCollision = current.some(index => squares[currentPosition + index].classList.contains('taken'))
-    if (!isAtRightEdge) model.currentPosition++
-    if (isCollision) model.currentPosition--
-    view.draw()
+    if (!isAtRightEdge && !isCollision) {
+      view.undraw()
+      model.currentPosition++
+      view.draw()
+    }   
   },
   rotate() {
     const width = model.width
