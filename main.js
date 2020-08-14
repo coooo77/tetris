@@ -32,6 +32,22 @@ const view = {
       displaySquares[1 + index].classList.add('tetromino')
     })
   },
+  checkAndRemoveGrids() {
+    for (let i = 0; i < 200; i += model.width) {
+      const row = [i, i + 1, i + 2, i + 3, i + 4, i + 5, i + 6, i + 7, i + 8, i + 9]
+      const isARowTetrominoes = row.every(index => model.squares[index].classList.contains('taken'))
+      if (isARowTetrominoes) {
+        model.numOfRemovedRow++
+        const grid = document.querySelector('.grid')
+        row.forEach(index => {
+          model.squares[index].classList.remove('tetromino', 'taken')
+        })
+        const squaresRemoved = model.squares.splice(i, model.width)
+        model.squares = squaresRemoved.concat(model.squares)
+        model.squares.forEach(cell => grid.appendChild(cell))
+      }
+    }
+  }
 }
 
 const controller = {
@@ -62,6 +78,8 @@ const controller = {
       view.draw()
       model.createNextNextTetromino()
       view.displayNextTetromino()
+      view.checkAndRemoveGrids()
+      model.addScore()
     }
   },
   moveLeft() {
@@ -203,6 +221,8 @@ const model = {
   nextTetromino: [],
   index: -1,
   nextIndex: -1,
+  score: 0,
+  numOfRemovedRow: 0,
   timerId: null,
   createTetromino(currentRotation = this.currentRotation, index = this.index, width) {
     return this.tetrominoes(width)[index][currentRotation]
@@ -226,6 +246,27 @@ const model = {
   createNextNextTetromino() {
     model.nextIndex = utility.randomIndex(model.tetrominoes())
     model.nextTetromino = model.createTetromino(0, model.nextIndex, 4)
+  },
+  addScore() {
+    const score = document.getElementById('score')
+    switch (model.numOfRemovedRow) {
+      case 0:
+        break
+      case 1:
+        model.score += 2
+        break
+      case 2:
+        model.score += 4
+        break
+      case 3:
+        model.score += 8
+        break
+      case 4:
+        model.score += 16
+        break
+    }
+    model.numOfRemovedRow = 0
+    score.innerText = model.score
   }
 }
 
