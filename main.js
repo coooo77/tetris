@@ -19,17 +19,21 @@ const view = {
   },
   draw() {
     model.currentTetromino.forEach(index => model.squares[model.currentPosition + index].classList.add('tetromino'))
+    model.currentTetromino.forEach(index => model.squares[model.currentPosition + index].style.backgroundColor = model.colors[model.index])
   },
   undraw() {
     model.currentTetromino.forEach(index => model.squares[model.currentPosition + index].classList.remove('tetromino'))
+    model.currentTetromino.forEach(index => model.squares[model.currentPosition + index].style.backgroundColor = '')
   },
   displayNextTetromino() {
     const displaySquares = document.querySelectorAll('.mini-grid div')
     displaySquares.forEach(square => {
       square.classList.remove('tetromino')
+      square.style.backgroundColor = ''
     })
     model.nextTetromino.forEach(index => {
       displaySquares[1 + index].classList.add('tetromino')
+      displaySquares[1 + index].style.backgroundColor = model.colors[model.nextIndex]
     })
   },
   checkAndRemoveGrids() {
@@ -41,6 +45,7 @@ const view = {
         const grid = document.querySelector('.grid')
         row.forEach(index => {
           model.squares[index].classList.remove('tetromino', 'taken')
+          model.squares[index].style.backgroundColor = ''
         })
         const squaresRemoved = model.squares.splice(i, model.width)
         model.squares = squaresRemoved.concat(model.squares)
@@ -247,6 +252,7 @@ const model = {
   score: 0,
   numOfRemovedRow: 0,
   timerId: null,
+  colors: ['yellow', 'green', 'blue', 'red', 'purple', 'darksalmon', 'brown'],
   createTetromino(currentRotation = this.currentRotation, index = this.index, width) {
     return this.tetrominoes(width)[index][currentRotation]
   },
