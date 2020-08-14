@@ -10,21 +10,36 @@ const view = {
       }
     }
     grid.innerHTML = girds
+    const miniGrid = document.querySelector('.mini-grid')
+    miniGrids = ''
+    for (let j = 0; j < 16; j++) {
+      miniGrids += '<div class=""></div>'
+    }
+    miniGrid.innerHTML = miniGrids
   },
   draw() {
     model.currentTetromino.forEach(index => model.squares[model.currentPosition + index].classList.add('tetromino'))
   },
   undraw() {
     model.currentTetromino.forEach(index => model.squares[model.currentPosition + index].classList.remove('tetromino'))
-  }
+  },
+  displayNextTetromino() {
+    const displaySquares = document.querySelectorAll('.mini-grid div')
+    displaySquares.forEach(square => {
+      square.classList.remove('tetromino')
+    })
+    model.nextTetromino.forEach(index => {
+      displaySquares[1 + index].classList.add('tetromino')
+    })
+  },
 }
 
 const controller = {
   displayGame() {
-    view.creatGirds()    
-    model.index = utility.randomIndex(model.tetrominoes())
-    model.currentTetromino = model.createTetromino()
-    model.squares = Array.from(document.querySelectorAll('.grid div'))    
+    model.initiGame()
+    view.draw()
+    model.createNextNextTetromino()
+    view.displayNextTetromino()   
     document.addEventListener('keyup', controller.control)
     timerId = setInterval(this.moveDown, 1000)
   },
@@ -42,10 +57,10 @@ const controller = {
     const isCollision = current.some(index => squares[currentPosition + index + width].classList.contains('taken'))
     if (isCollision) {
       current.forEach(index => squares[currentPosition + index].classList.add('taken'))
-      model.index = utility.randomIndex(model.tetrominoes())
-      model.currentTetromino = model.createTetromino()
-      model.currentPosition = 4
+      model.renewTetromino()
       view.draw()
+      model.createNextNextTetromino()
+      view.displayNextTetromino()
     }
   },
   moveLeft() {
@@ -127,8 +142,7 @@ const controller = {
 }
 
 const model = {
-  tetrominoes() {    
-    const width = this.width
+  tetrominoes(width = this.width) {
     const tetrominoL = [
       [1, width + 1, width * 2 + 1, 2],
       [width, width + 1, width + 2, width * 2 + 2],
@@ -174,9 +188,31 @@ const model = {
     return this.createTetromino()
   },
   currentTetromino: [],
-  index: 0,
-  createTetromino(currentRotation = this.currentRotation) {
-    return this.tetrominoes()[this.index][currentRotation]
+  nextTetromino: [],
+  index: -1,
+  nextIndex: -1,
+  createTetromino(currentRotation = this.currentRotation, index = this.index, width) {
+    return this.tetrominoes(width)[index][currentRotation]
+  },
+  renewTetromino() {
+    // 將下一個Tetromino移動到現在的Tetromino，使用nextIndex提取
+    model.currentTetromino = model.createTetromino(0, model.nextIndex, model.width)
+    // 重新建立位置
+    model.currentPosition = 4
+    // 紀錄現在的index，使旋轉時知道是哪種Tetromino在旋轉
+    model.index = model.nextIndex
+    // 指定下一個Tetromino
+    model.nextIndex = utility.randomIndex(model.tetrominoes())
+  },
+  initiGame() {
+    view.creatGirds()
+    model.index = utility.randomIndex(model.tetrominoes())
+    model.currentTetromino = model.createTetromino()
+    model.squares = Array.from(document.querySelectorAll('.grid div'))
+  },
+  createNextNextTetromino() {
+    model.nextIndex = utility.randomIndex(model.tetrominoes())
+    model.nextTetromino = model.createTetromino(0, model.nextIndex, 4)
   }
 }
 
