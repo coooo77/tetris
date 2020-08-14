@@ -255,7 +255,7 @@ const model = {
   score: 0,
   numOfRemovedRow: 0,
   timerId: null,
-  colors: ['yellow', 'green', 'blue', 'red', 'purple', 'darksalmon', 'brown'],
+  colors: ['yellow', 'greenyellow', 'orange', 'pink', 'cyan', 'darksalmon', 'cornflowerblue'],
   createTetromino(currentRotation = this.currentRotation, index = this.index, width) {
     return this.tetrominoes(width)[index][currentRotation]
   },
