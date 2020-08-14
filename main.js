@@ -39,9 +39,10 @@ const controller = {
     model.initiGame()
     view.draw()
     model.createNextNextTetromino()
-    view.displayNextTetromino()   
+    view.displayNextTetromino()
     document.addEventListener('keyup', controller.control)
-    timerId = setInterval(this.moveDown, 1000)
+    model.timerId = setInterval(this.moveDown, 1000)
+    this.pause()
   },
   moveDown() {
     view.undraw()
@@ -75,7 +76,7 @@ const controller = {
     if (isCollision) model.currentPosition++
     view.draw()
   },
-  moveRight() {    
+  moveRight() {
     const width = model.width
     const squares = model.squares
     const current = model.currentTetromino
@@ -138,6 +139,17 @@ const controller = {
         controller.moveDown()
         break;
     }
+  },
+  pause() {
+    const startBtn = document.getElementById('start-button')
+    startBtn.addEventListener('click', () => {
+      if (model.timerId) {
+        clearInterval(model.timerId)
+        model.timerId = null
+      } else {
+        model.timerId = setInterval(this.moveDown, 1000)
+      }
+    })
   }
 }
 
@@ -191,6 +203,7 @@ const model = {
   nextTetromino: [],
   index: -1,
   nextIndex: -1,
+  timerId: null,
   createTetromino(currentRotation = this.currentRotation, index = this.index, width) {
     return this.tetrominoes(width)[index][currentRotation]
   },
