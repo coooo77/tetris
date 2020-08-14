@@ -80,6 +80,7 @@ const controller = {
       view.displayNextTetromino()
       view.checkAndRemoveGrids()
       model.addScore()
+      this.gameOver()
     }
   },
   moveLeft() {
@@ -168,6 +169,14 @@ const controller = {
         model.timerId = setInterval(this.moveDown, 1000)
       }
     })
+  },
+  gameOver() {
+    const score = document.getElementById('score')
+    const isCollision = model.currentTetromino.some(index => model.squares[model.currentPosition + index].classList.contains('taken'))
+    if (isCollision) {
+      score.innerText = 'Game Over！'
+      clearInterval(model.timerId)
+    }
   }
 }
 
