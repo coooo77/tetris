@@ -182,17 +182,29 @@ const controller = {
 
 const model = {
   tetrominoes(width = this.width) {
-    const tetrominoL = [
+    const tetrominoJ = [
       [1, width + 1, width * 2 + 1, 2],
       [width, width + 1, width + 2, width * 2 + 2],
       [1, width + 1, width * 2 + 1, width * 2],
       [width, width * 2, width * 2 + 1, width * 2 + 2]
     ]
-    const tetrominoZ = [
+    const tetrominoL = [
+      [0, 1, width + 1, width * 2 + 1],
+      [width, width + 1, width + 2, 2],
+      [1, width + 1, width * 2 + 1, width * 2 + 2],
+      [width, width + 1, width + 2, width * 2]
+    ]
+    const tetrominoS = [
       [0, width, width + 1, width * 2 + 1],
       [width + 1, width + 2, width * 2, width * 2 + 1],
       [0, width, width + 1, width * 2 + 1],
       [width + 1, width + 2, width * 2, width * 2 + 1]
+    ]
+    const tetrominoZ = [
+      [1, width, width + 1, width * 2],
+      [width, width + 1, width * 2 + 1, width * 2 + 2],
+      [1, width, width + 1, width * 2],
+      [width, width + 1, width * 2 + 1, width * 2 + 2]
     ]
     const tetrominoT = [
       [1, width, width + 1, width + 2],
@@ -213,7 +225,9 @@ const model = {
       [width, width + 1, width + 2, width + 3]
     ]
     return [
+      tetrominoJ,
       tetrominoL,
+      tetrominoS,
       tetrominoZ,
       tetrominoT,
       tetrominoO,
