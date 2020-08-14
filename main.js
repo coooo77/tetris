@@ -25,6 +25,7 @@ const controller = {
     model.currentTetromino = model.createTetromino()
     model.squares = Array.from(document.querySelectorAll('.grid div'))
     view.draw()
+    document.addEventListener('keyup', controller.control)
     timerId = setInterval(this.moveDown, 1000)
   },
   moveDown() {
@@ -44,6 +45,46 @@ const controller = {
       model.currentTetromino = model.createTetromino()
       model.currentPosition = 4
       view.draw()
+    }
+  },
+  moveLeft() {
+    const current = model.currentTetromino
+    const width = model.width
+    const squares = model.squares
+    const currentPosition = model.currentPosition
+    view.undraw()
+    const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0)
+    const isCollision = current.some(index => squares[currentPosition + index].classList.contains('taken'))
+    if (!isAtLeftEdge) model.currentPosition--
+    if (isCollision) model.currentPosition++
+    view.draw()
+  },
+  moveRight() {
+    const current = model.currentTetromino
+    const width = model.width
+    const squares = model.squares
+    const currentPosition = model.currentPosition
+    view.undraw()
+    const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1)
+    const isCollision = current.some(index => squares[currentPosition + index].classList.contains('taken'))
+    if (!isAtRightEdge) model.currentPosition++
+    if (isCollision) model.currentPosition--
+    view.draw()
+  },
+  control(event) {
+    switch (event.keyCode) {
+      case 37:
+        controller.moveLeft()
+        break;
+      case 38:
+        // controller.rotate()
+        break;
+      case 39:
+        controller.moveRight()
+        break;
+      case 40:
+        // controller.moveDown()
+        break;
     }
   }
 }
