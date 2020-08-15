@@ -198,14 +198,33 @@ const controller = {
       right: controller.moveRight,
       left: controller.moveLeft
     }
+    const controlForMobile = {      
+      upForMobile: controller.rotate,
+      downForMobile: controller.moveDown,
+      rightForMobile: controller.moveRight,
+      leftForMobile: controller.moveLeft
+    }
     const arr = Object.keys(control)
+    const arrForMobile = Object.keys(controlForMobile)
     arr.forEach(name => {
       utility.addController(name, control)
+    })
+    arrForMobile.forEach(name => {
+      utility.addController(name, controlForMobile)
     })
   },
   pause() {
     const startBtn = document.getElementById('start-button')
     startBtn.addEventListener('click', () => {
+      if (model.timerId) {
+        clearInterval(model.timerId)
+        model.timerId = null
+      } else {
+        model.timerId = setInterval(this.moveDown, model.speed)
+      }
+    })
+    const startBtn1 = document.getElementById('start-button1')
+    startBtn1.addEventListener('click', () => {
       if (model.timerId) {
         clearInterval(model.timerId)
         model.timerId = null
@@ -352,6 +371,7 @@ const utility = {
   },
   addController(name, movement) {
     const site = document.querySelector(`.${name}`)
+    console.log(site)
     site.addEventListener('click', () => {
       movement[name]()
     })

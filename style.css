@@ -149,3 +149,30 @@ h3 {
 .keyBoard0 button {
   width: 70px;
 }
+
+.controller {
+  background-color: gainsboro;
+  display: flex;
+  justify-content: center;
+  padding: 5px 10px 15px 10px;  
+}
+
+@media (max-width: 768px) {
+  .info {
+    display: none;
+  }
+
+  .intro {    
+    justify-content: center;
+  }
+  
+  #container {
+    flex-direction: column;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .controller {
+    display: none;
+  }
+}
