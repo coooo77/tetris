@@ -150,19 +150,16 @@ const controller = {
     // 目前位置
     const current = model.currentTetromino
     const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0)
-    const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1)
-
+    const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1 || (currentPosition + index) % width === width - 2)
+    const backWard = nextTetromino.filter(index => (currentPosition + index) % width === 0 || (currentPosition + index) % width === 1)
     const isCollision = nextTetromino.some(index => squares[currentPosition + index].classList.contains('taken'))
     if (isCollision) {
       return
     } else {
       view.undraw()
-      if (nextIsAtLeftEdge & isAtRightEdge) {
-        model.currentPosition--
-        const isTetrominoI = nextTetromino[3] - nextTetromino[0] === 3
-        // tetrominoI 太長了，需要讓現在位置-2
+      if (nextIsAtLeftEdge & isAtRightEdge) {        
         // 另一種想法，如果有兩格跑到另一側，那就退後兩格
-        if (isTetrominoI) model.currentPosition--
+        model.currentPosition -= backWard.length
       } else if (nextIsAtRightEdge & isAtLeftEdge) {
         model.currentPosition++
       }
