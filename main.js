@@ -159,6 +159,9 @@ const controller = {
       case 38:
         controller.rotate()
         break;
+      case 17:
+        controller.rotate()
+        break;
       case 39:
         controller.moveRight()
         break;
@@ -179,7 +182,7 @@ const controller = {
     })
   },
   gameOver() {
-    const score = document.getElementById('score')
+    const score = document.querySelector('h3')
     const isCollision = model.currentTetromino.some(index => model.squares[model.currentPosition + index].classList.contains('taken'))
     if (isCollision) {
       score.innerText = 'Game Over！'
