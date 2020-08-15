@@ -66,10 +66,18 @@ const controller = {
     this.pause()
   },
   moveDown() {
-    view.undraw()
-    model.currentPosition += model.width
-    view.draw()
-    controller.freeze()
+    const currentPosition = model.currentPosition
+    const current = model.currentTetromino
+    const squares = model.squares
+    const width = model.width
+    const isCollision = current.some(index => squares[currentPosition + index + width].classList.contains('taken'))
+    if (isCollision) {
+      controller.freeze()
+    } else {
+      view.undraw()
+      model.currentPosition += model.width
+      view.draw()
+    }    
   },
   freeze() {
     const currentPosition = model.currentPosition
@@ -79,11 +87,11 @@ const controller = {
     const isCollision = current.some(index => squares[currentPosition + index + width].classList.contains('taken'))
     if (isCollision) {
       current.forEach(index => squares[currentPosition + index].classList.add('taken'))
-      model.renewTetromino()
-      view.draw()
+      model.renewTetromino()      
       model.createNextNextTetromino()
       view.displayNextTetromino()
       view.checkAndRemoveGrids()
+      view.draw()
       model.addScore()
       this.gameOver()
     }
@@ -108,7 +116,7 @@ const controller = {
     const current = model.currentTetromino
     const currentPosition = model.currentPosition    
     const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1)
-    const isCollision = current.some(index => squares[currentPosition + index].classList.contains('taken'))
+    const isCollision = current.some(index => squares[currentPosition + index+1].classList.contains('taken'))
     if (!isAtRightEdge && !isCollision) {
       view.undraw()
       model.currentPosition++
