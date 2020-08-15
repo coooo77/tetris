@@ -64,6 +64,7 @@ const controller = {
     document.addEventListener('keyup', controller.control)
     model.timerId = setInterval(this.moveDown, model.speed)
     this.pause()
+    this.mouseControl()
   },
   moveDown() {
     const currentPosition = model.currentPosition
@@ -177,6 +178,19 @@ const controller = {
         controller.moveDown()
         break;
     }
+  },
+  mouseControl() {
+    const control = {
+      rotate: controller.rotate,
+      up: controller.rotate,
+      down: controller.moveDown,
+      right: controller.moveRight,
+      left: controller.moveLeft
+    }
+    const arr = Object.keys(control)
+    arr.forEach(name => {
+      utility.addController(name, control)
+    })
   },
   pause() {
     const startBtn = document.getElementById('start-button')
@@ -324,6 +338,12 @@ const model = {
 const utility = {
   randomIndex(array) {
     return Math.floor(Math.random() * array.length)
+  },
+  addController(name, movement) {
+    const site = document.querySelector(`.${name}`)
+    site.addEventListener('click', () => {
+      movement[name]()
+    })
   }
 }
 
