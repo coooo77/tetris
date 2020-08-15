@@ -62,7 +62,7 @@ const controller = {
     model.createNextNextTetromino()
     view.displayNextTetromino()
     document.addEventListener('keyup', controller.control)
-    model.timerId = setInterval(this.moveDown, 1000)
+    model.timerId = setInterval(this.moveDown, model.speed)
     this.pause()
   },
   moveDown() {
@@ -174,7 +174,7 @@ const controller = {
         clearInterval(model.timerId)
         model.timerId = null
       } else {
-        model.timerId = setInterval(this.moveDown, 1000)
+        model.timerId = setInterval(this.moveDown, model.speed)
       }
     })
   },
@@ -253,6 +253,7 @@ const model = {
   index: -1,
   nextIndex: -1,
   score: 0,
+  speed: 1000,
   numOfRemovedRow: 0,
   timerId: null,
   colors: ['yellow', 'greenyellow', 'orange', 'pink', 'cyan', 'darksalmon', 'cornflowerblue'],
@@ -286,17 +287,24 @@ const model = {
         break
       case 1:
         model.score += 2
+        model.speed = model.speed < 100 ? 100 : model.speed - 10
         break
       case 2:
         model.score += 4
+        model.speed = model.speed < 100 ? 100 : model.speed - 20
         break
       case 3:
         model.score += 8
+        model.speed = model.speed < 100 ? 100 : model.speed - 40
         break
       case 4:
         model.score += 16
+        model.speed = model.speed < 100 ? 100 : model.speed - 80
         break
     }
+    clearInterval(model.timerId)
+    model.timerId = null
+    model.timerId = setInterval(controller.moveDown, model.speed)
     model.numOfRemovedRow = 0
     score.innerText = model.score
   }
