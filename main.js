@@ -62,6 +62,7 @@ const controller = {
     model.createNextNextTetromino()
     view.displayNextTetromino()
     document.addEventListener('keyup', controller.control)
+    document.addEventListener('keydown', controller.rush)
     model.timerId = setInterval(this.moveDown, model.speed)
     this.pause()
     this.mouseControl()
@@ -78,7 +79,20 @@ const controller = {
       view.undraw()
       model.currentPosition += model.width
       view.draw()
-    }    
+    }
+  },
+  rush(event) {
+    switch (event.keyCode) {
+      // case 37:
+      //   controller.moveLeft()
+      //   break;
+      // case 39:
+      //   controller.moveRight()
+      //   break;
+      case 40:
+        controller.moveDown()
+        break;
+    }
   },
   freeze() {
     const currentPosition = model.currentPosition
@@ -88,7 +102,7 @@ const controller = {
     const isCollision = current.some(index => squares[currentPosition + index + width].classList.contains('taken'))
     if (isCollision) {
       current.forEach(index => squares[currentPosition + index].classList.add('taken'))
-      model.renewTetromino()      
+      model.renewTetromino()
       model.createNextNextTetromino()
       view.displayNextTetromino()
       view.checkAndRemoveGrids()
@@ -102,27 +116,27 @@ const controller = {
     const width = model.width
     const squares = model.squares
     const currentPosition = model.currentPosition
-    
+
     const isAtLeftEdge = current.some(index => (currentPosition + index) % width === 0)
     const isCollision = current.some(index => squares[currentPosition + index - 1].classList.contains('taken'))
     if (!isAtLeftEdge && !isCollision) {
       view.undraw()
       model.currentPosition--
       view.draw()
-    }  
+    }
   },
   moveRight() {
     const width = model.width
     const squares = model.squares
     const current = model.currentTetromino
-    const currentPosition = model.currentPosition    
+    const currentPosition = model.currentPosition
     const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1)
-    const isCollision = current.some(index => squares[currentPosition + index+1].classList.contains('taken'))
+    const isCollision = current.some(index => squares[currentPosition + index + 1].classList.contains('taken'))
     if (!isAtRightEdge && !isCollision) {
       view.undraw()
       model.currentPosition++
       view.draw()
-    }   
+    }
   },
   rotate() {
     const width = model.width
